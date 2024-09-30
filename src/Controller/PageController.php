@@ -39,9 +39,19 @@ class PageController extends AbstractController
     }
 
     #[Route('/peliculas/buscar/{id}', name: 'buscar_pelicula')]
-    public function buscar(ManagerRegistry $doctrine, $id): Response {
+    public function buscar(ManagerRegistry $doctrine, $id): Response
+    {
         $repositorio = $doctrine->getRepository(Peliculas::class);
         $peliculas = $repositorio->find($id);
+        return $this->render('page/buscar.html.twig', [
+            'peliculas' => $peliculas
+        ]);
+    }
+
+    #[Route('/peliculas/{buscar}', name: 'buscar_peliculas')]
+    public function buscarPelicula(ManagerRegistry $doctrine, $texto): Response{
+        $repositorio = $doctrine->getRepository(Peliculas::class);
+        $peliculas = $repositorio->findByName($texto);
         return $this->render('page/buscar.html.twig', [
             'peliculas' => $peliculas
         ]);
